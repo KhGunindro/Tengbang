@@ -1,7 +1,7 @@
 import React, { useState, useEffect }from 'react';
 import { useStateContext } from '../context';
 import { DisplayCampaigns } from '../components'; 
-
+import { daysLeft } from '../utils';
 
 const Home = () => {
   
@@ -21,9 +21,14 @@ const Home = () => {
     if(contract) fetchCampaigns();
   },[address, contract]); 
 
+  const filteredCampaigns = campaigns.filter(campaign => daysLeft(campaign.deadline) >= 0);
+  const activeCampaignsCount = filteredCampaigns.length;
+  const anyCampaignExpired = activeCampaignsCount < campaigns.length;
+  const title = `All Campaigns (${activeCampaignsCount})`;
+
   return (
     <DisplayCampaigns
-      title = "All Campaigns"
+      title = {title}
       isLoading = {isLoading}
       campaigns = {campaigns}
     />
